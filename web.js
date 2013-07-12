@@ -7,13 +7,16 @@ fs.readFileSync('/index.html', function(err,data){
     console.log(data);
 });
 
-var output = data.toString('utf8',0,data.length);
+//var output = data.toString('utf8',0,data.length);
 
 //console.log(fileContents);
 console.log(output);
 
-app.get('/', function(request, response,output) {
-       response.send("Hello World2!"); 
+app.get('/', function(request, response) {
+
+filecontents = fs.readFileSync('index.html');
+output = filecontents.toString('utf8',0);
+response.send(output); 
 });
 
 var port = process.env.PORT || 5000;
