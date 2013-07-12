@@ -8,6 +8,5 @@ app.get('/', function(request, response) {
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
-
-  xconsole.log("Listening on " + port);
+  console.log("Listening on " + port);
 });
