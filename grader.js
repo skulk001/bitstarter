@@ -25,6 +25,7 @@ var fs = require('fs');
 var program = require('commander');
 var cheerio = require('cheerio');
 var rest = require('restler');
+var sys = require('util');
 var HTMLFILE_DEFAULT = "index.html";
 
 var CHECKSFILE_DEFAULT = "checks.json";
@@ -59,14 +60,18 @@ var checkHtmlFile = function(htmlfile, checksfile) {
 };
 
 var writeHtmlToFile = function(URL) {
-   var Webpage_Temp = 'webnew.html';
-   var restResult =  rest.get(URL);
-   var results = restResult.on('complete', function(result){
-       fs.writeFile(Webpage_Temp,result); 
-       return Webpage_Temp;  
-       });
-   return results;
-   
+      var page = 'webpage.html'
+     rest.get(URL).on('complete', function(result) {
+     if (result instanceof Error) {
+	 sys.puts('Error: ' + result.message);
+	 this.retry(5000);
+	 }
+     else{
+	 fs.writeFile(page, result, function(err) {
+	     if (err) throw err;
+	     console.log('It\'s Saved!');
+	     });
+      return page; 
 }
 
 
@@ -88,5 +93,7 @@ if(require.main == module) {
     var outJson = JSON.stringify(checkJson, null, 4);
     console.log(outJson);
 } else {
+
+
     exports.checkHtmlFile = checkHtmlFile;
 }
